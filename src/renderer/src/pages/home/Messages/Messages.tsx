@@ -100,19 +100,20 @@ const Messages: React.FC<MessagesProps> = ({ assistant, topic, setActiveTopic })
           window.api.file.saveImage(removeSpecialCharactersForFileName(topic.name), imageData)
         }
       }),
-      EventEmitter.on(EVENT_NAMES.NEW_CONTEXT, async () => {
-        const lastMessage = last(messages)
+      EventEmitter.on(EVENT_NAMES.NEW_CONTEXT, async (clearMessage: Message) => {
+        clearMessage = clearMessage || last(messages)
 
-        if (lastMessage?.type === 'clear') {
-          deleteMessage(lastMessage)
+        if (clearMessage?.type === 'clear') {
+          deleteMessage(clearMessage)
+
           scrollToBottom()
           return
         }
 
         if (messages.length === 0) return
 
-        const clearMessage = getUserMessage({ assistant, topic, type: 'clear' })
-        const newMessages = [...messages, clearMessage]
+        const newClearMessage = getUserMessage({ assistant, topic, type: 'clear' })
+        const newMessages = [...messages, newClearMessage]
         await updateMessages(newMessages)
 
         scrollToBottom()
