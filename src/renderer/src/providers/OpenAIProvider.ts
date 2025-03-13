@@ -221,6 +221,7 @@ export default class OpenAIProvider extends BaseProvider {
 
         return {
           thinking: {
+            type: 'enabled',
             budget_tokens: budgetTokens
           }
         }
@@ -253,7 +254,7 @@ export default class OpenAIProvider extends BaseProvider {
     const userMessages: ChatCompletionMessageParam[] = []
 
     const _messages = filterUserRoleStartMessages(
-      filterContextMessages(filterEmptyMessages(takeRight(messages, contextCount + 1)))
+      filterEmptyMessages(filterContextMessages(takeRight(messages, contextCount + 1)))
     )
 
     onFilterMessages(_messages)
